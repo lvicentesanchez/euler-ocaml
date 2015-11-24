@@ -1,4 +1,9 @@
-let is_even n = 
+#!/usr/bin/env ocamlscript
+Ocaml.ocamlflags := ["-thread"];
+Ocaml.packs := []
+--
+
+let is_even n =
   n mod 2 = 0;;
 
 let problem_02 limit =
@@ -8,5 +13,5 @@ let problem_02 limit =
     | b                -> fib acc b (a + b)
   in fib 0 1 1;;
 
-print_int (problem_02 4000000);;
-
+let () =
+  print_int (problem_02 4000000);;
