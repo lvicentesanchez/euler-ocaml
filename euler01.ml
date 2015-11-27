@@ -1,5 +1,5 @@
 #!/usr/bin/env ocamlscript
-Ocaml.ocamlflags := ["-thread"];
+Ocaml.ocamlflags := [ "-thread" ];
 Ocaml.packs := [ "core" ]
 --
 
