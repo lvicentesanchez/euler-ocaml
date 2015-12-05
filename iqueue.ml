@@ -10,8 +10,9 @@ let rec dequeue = function
 
 let empty = ([], [])
 
-let is_empty (i, o) =
-  (List.is_empty i) && (List.is_empty o)
+let is_empty = function
+  | ([], []) -> true
+  | _        -> false
 
 let length (i, o) =
   (List.length i) + (List.length o)
@@ -21,4 +22,4 @@ let map (i, o) ~f =
 
 let peek (_, o) = List.hd o
 
-let queue (i, o) a = (i, a :: o)
+let queue (i, o) a = (a :: i, o)
