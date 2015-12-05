@@ -14,7 +14,7 @@ let map = List.map
 let peek = List.hd
 
 let pop = function
-  | []      -> (None  , [])
-  | h :: t' -> (Some h, t')
+  | []      -> None
+  | h :: t' -> Some (h, t')
 
 let push t a = a :: t

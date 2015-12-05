@@ -1,5 +1,7 @@
 type 'a t
 
+val dequeue: 'a t -> ('a * 'a t) option
+
 val empty: 'a t
 
 val is_empty: 'a t -> bool
@@ -10,6 +12,4 @@ val map: 'a t -> f:('a -> 'b) -> 'b t
 
 val peek: 'a t -> 'a option
 
-val pop: 'a t -> ('a * 'a t) option
-
-val push: 'a t -> 'a -> 'a t
+val queue: 'a t -> 'a -> 'a t
