@@ -10,6 +10,10 @@ let rec dequeue = function
 
 let empty = ([], [])
 
+let fold (i, o) ~init ~f =
+  let partial = List.fold ~init ~f o in
+  List.fold_right ~init:partial ~f:(fun a acc -> f acc a) i
+
 let is_empty = function
   | ([], []) -> true
   | _        -> false

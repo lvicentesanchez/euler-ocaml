@@ -5,6 +5,8 @@ type 'a t = 'a list
 
 let empty = []
 
+let fold = List.fold
+
 let is_empty = List.is_empty
 
 let length = List.length
