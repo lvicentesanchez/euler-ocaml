@@ -35,8 +35,7 @@ struct
         (module M: Data.Monoid with type t = b)
     =
     let f = fun b a -> M.append b (f a)
-    in
-    fold t ~init:M.zero ~f
+    in fold t ~init:M.zero ~f
 
   let iter t ~f =
     fold t ~init:() ~f:(fun () a -> f a)
