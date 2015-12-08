@@ -7,11 +7,12 @@ end
 
 module type Extension = sig
   type 'a t
+  val count   : 'a t -> f:('a -> bool) -> int
+  val exists  : 'a t -> f:('a -> bool) -> bool
+  val fold_monoid: 'a t -> (module Data.Monoid with type t = 'a) -> 'a
+  val for_all : 'a t -> f:('a -> bool) -> bool
   val iter    : 'a t -> f:('a -> unit) -> unit
   val length  : 'a t -> int
-  val count   : 'a t -> f:('a -> bool) -> int
-  val for_all : 'a t -> f:('a -> bool) -> bool
-  val exists  : 'a t -> f:('a -> bool) -> bool
 end
 
 module Extend(Arg : S)
@@ -22,19 +23,22 @@ struct
   let iter t ~f =
     fold t ~init:() ~f:(fun () a -> f a)
 
-  let length t =
-    fold t ~init:0  ~f:(fun acc _ -> acc + 1)
+  exception Short_circuit
 
   let count t ~f =
     fold t ~init:0  ~f:(fun count x -> count + if f x then 1 else 0)
 
-  exception Short_circuit
+  let exists c ~f =
+    try iter c ~f:(fun x -> if f x then raise Short_circuit); false
+    with Short_circuit -> true
+
+  let fold_monoid (type a) (l: a t) (module M: Data.Monoid with type t = a) =
+    fold l ~init:M.zero ~f:M.append
 
   let for_all c ~f =
     try iter c ~f:(fun x -> if not (f x) then raise Short_circuit); true
     with Short_circuit -> false
 
-  let exists c ~f =
-    try iter c ~f:(fun x -> if f x then raise Short_circuit); false
-    with Short_circuit -> true
+  let length t =
+    fold t ~init:0  ~f:(fun acc _ -> acc + 1)
 end
