@@ -1,3 +1,6 @@
+(*
+ * Initial version copied from 'Real World OCaml'
+ *)
 open Core.Std
 
 module type S = sig
