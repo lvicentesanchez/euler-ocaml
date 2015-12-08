@@ -30,8 +30,8 @@ struct
   let fold_map
         (type a)
         (type b)
-        t
-        ~f
+        (t: a t)
+       ~(f: a -> b)
         (module M: Data.Monoid with type t = b)
     =
     let f = fun b a -> M.append b (f a)
@@ -46,7 +46,7 @@ struct
 
   let sum
         (type a)
-        t
+        (t: a t)
         (module M: Data.Monoid with type t = a)
     =
     fold t ~init:M.zero ~f:M.append
