@@ -12,6 +12,7 @@ module type Extension = sig
   type 'a t
   val count       : 'a t -> f:('a -> bool) -> int
   val exists      : 'a t -> f:('a -> bool) -> bool
+  val fold_map    : 'a t -> f:('a -> 'b) -> (module Data.Monoid with type t = 'b) -> 'b
   val fold_monoid : 'a t -> (module Data.Monoid with type t = 'a) -> 'a
   val for_all     : 'a t -> f:('a -> bool) -> bool
   val iter        : 'a t -> f:('a -> unit) -> unit
@@ -26,9 +27,20 @@ struct
   let count t ~f =
     fold t ~init:0  ~f:(fun count x -> count + if f x then 1 else 0)
 
+  let fold_map
+        (type a)
+        (type b)
+        t
+        ~f
+        (module M: Data.Monoid with type t = b)
+    =
+    let f = fun b a -> M.append b (f a)
+    in
+    fold t ~init:M.zero ~f
+
   let fold_monoid
         (type a)
-        (t: a t)
+        t
         (module M: Data.Monoid with type t = a)
     =
     fold t ~init:M.zero ~f:M.append
